@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="tinylog">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/tinylog" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/tinylog" recursive="false" />
+  </library>
+</component>
