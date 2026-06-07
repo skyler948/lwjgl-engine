@@ -20,7 +20,7 @@ public class GameScene extends Scene {
                 0, 1, 3, 3, 1, 2,
         };
 
-        GameObject testObject = new GameObject(new Vector3f(0.25f, 0.25f, 0));
+        GameObject testObject = new GameObject(new Vector3f(0.25f, 0.25f, -2.f));
         testObject.addComponent("testMesh", new Mesh(positions, indices));
         addObject(testObject);
     }

@@ -17,7 +17,7 @@ public abstract class Scene {
         this.engine = engine;
 
         objects = new ArrayList<>();
-        objectRenderer = new ObjectRenderer();
+        objectRenderer = new ObjectRenderer(engine);
     }
 
     public abstract void input();

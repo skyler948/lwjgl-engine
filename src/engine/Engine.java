@@ -4,6 +4,7 @@ import engine.display.Display;
 import engine.scene.GameScene;
 import engine.scene.Scene;
 import engine.scene.SceneManager;
+import engine.view.Projection;
 import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -16,6 +17,7 @@ public class Engine {
 
     private Display display;
     private SceneManager sceneManager;
+    private Projection projection;
 
     private int targetFps;
     private int currentFps, currentTps;
@@ -38,6 +40,7 @@ public class Engine {
         glCullFace(GL_BACK);
 
         sceneManager = new SceneManager(new GameScene(this));
+        projection = new Projection(this, 60.f);
     }
 
     public void input() { // Use Time.deltaTime();
@@ -118,6 +121,7 @@ public class Engine {
 
     public void resize() {
         if (display == null) return;
+        projection.updateProjectionMatrix();
     }
 
     private void cleanUp() {
@@ -144,6 +148,10 @@ public class Engine {
 
     public Scene getCurrentScene() {
         return sceneManager.getScene();
+    }
+
+    public Projection getProjection() {
+        return projection;
     }
 
     public int getTargetFps() {

@@ -153,6 +153,10 @@ public class Display {
         return height;
     }
 
+    public float getRatio() {
+        return width / (float) height;
+    }
+
     public DirectoryManager getDirectoryManager() {
         return directoryManager;
     }

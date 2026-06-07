@@ -136,7 +136,13 @@ public class GameObject {
     }
 
     public void addComponent(String name, Component component) {
+        component.setParentObject(this);
         components.put(name, component);
+    }
+
+    public void removeComponent(String name) {
+        components.get(name).setParentObject(null);
+        components.remove(name);
     }
 
     public Component getComponent(String name) {
