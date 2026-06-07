@@ -121,6 +121,7 @@ public class Engine {
     }
 
     private void cleanUp() {
+        getCurrentScene().cleanUp();
         display.cleanUp();
     }
 
