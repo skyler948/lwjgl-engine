@@ -1,6 +1,9 @@
 package engine;
 
 import engine.display.Display;
+import engine.scene.GameScene;
+import engine.scene.Scene;
+import engine.scene.SceneManager;
 import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -12,6 +15,7 @@ public class Engine {
     private boolean running = false;
 
     private Display display;
+    private SceneManager sceneManager;
 
     private int targetFps;
     private int currentFps, currentTps;
@@ -27,25 +31,28 @@ public class Engine {
     }
 
     public void init() {
-
-    }
-
-    public void input() { // Use Time.deltaTime();
-
-    }
-
-    public void update() {
-
-    }
-
-    public void render() {
         GL.createCapabilities();
 
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
 
-        // Scene
+        sceneManager = new SceneManager(new GameScene(this));
+    }
+
+    public void input() { // Use Time.deltaTime();
+        getCurrentScene().input();
+    }
+
+    public void update() {
+        getCurrentScene().update();
+    }
+
+    public void render() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glViewport(0, 0, display.getWidth(), display.getHeight());
+
+        getCurrentScene().render();
     }
 
     private void run() {
@@ -128,6 +135,14 @@ public class Engine {
 
     public Display getDisplay() {
         return display;
+    }
+
+    public SceneManager getSceneManager() {
+        return sceneManager;
+    }
+
+    public Scene getCurrentScene() {
+        return sceneManager.getScene();
     }
 
     public int getTargetFps() {
