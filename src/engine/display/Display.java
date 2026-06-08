@@ -2,6 +2,7 @@ package engine.display;
 
 import engine.save.DirectoryManager;
 import engine.save.Settings;
+import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.MemoryUtil;
@@ -12,7 +13,6 @@ import java.util.concurrent.Callable;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Display {
@@ -23,6 +23,12 @@ public class Display {
     private Callable<Void> resize;
 
     private DirectoryManager directoryManager;
+
+    private Vector2f mousePosition;
+    private Vector2f differencePosition;
+    private Vector2f lastPosition;
+
+    private boolean cursorInWindow;
 
     public Display(Callable<Void> resize) {
         this.resize = resize;
@@ -83,6 +89,14 @@ public class Display {
 
         glfwSetKeyCallback(WINDOW_HANDLE, (d, k, s, a, m) -> keyCallback(k, a));
 
+        mousePosition = new Vector2f();
+        differencePosition = new Vector2f();
+        lastPosition = new Vector2f();
+
+        glfwSetCursorPosCallback(WINDOW_HANDLE, (h, x, y) -> mousePosition.set(x, y));
+
+        glfwSetCursorEnterCallback(WINDOW_HANDLE, (h, e) -> cursorInWindow = e);
+
         glfwMakeContextCurrent(WINDOW_HANDLE);
 
         glfwSwapInterval(getSettings().getFps() > 0 ? 0 : 1);
@@ -110,6 +124,20 @@ public class Display {
         }
     }
 
+    public void calculateMouseDifference() {
+        differencePosition.set(0, 0);
+
+        if (lastPosition.x > 0 && lastPosition.y > 0 && cursorInWindow) {
+            float dx = mousePosition.x - lastPosition.x;
+            float dy = mousePosition.y - lastPosition.y;
+
+            if (dx != 0) differencePosition.x = dx;
+            if (dy != 0) differencePosition.y = dy;
+        }
+
+        lastPosition.set(mousePosition);
+    }
+
     public void keyCallback(int key, int action) {
         if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
             glfwSetWindowShouldClose(WINDOW_HANDLE, true);
@@ -118,6 +146,10 @@ public class Display {
 
     public boolean isKeyHeld(int key) {
         return glfwGetKey(WINDOW_HANDLE, key) == GLFW_PRESS;
+    }
+
+    public boolean isMouseHeld(int button) {
+        return glfwGetMouseButton(WINDOW_HANDLE, button) == GLFW_PRESS;
     }
 
     public boolean displayShouldClose() {
@@ -163,6 +195,18 @@ public class Display {
 
     public Settings getSettings() {
         return directoryManager.getSettings();
+    }
+
+    public boolean isCursorInWindow() {
+        return cursorInWindow;
+    }
+
+    public Vector2f getMousePosition() {
+        return mousePosition;
+    }
+
+    public Vector2f getMouseDifferencePosition() {
+        return differencePosition;
     }
 
 }

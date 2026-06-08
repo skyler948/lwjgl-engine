@@ -30,6 +30,7 @@ public class ObjectRenderer {
 
         uniformsMap = new UniformsMap(shaderProgram.getProgramId());
         uniformsMap.createUniform("projectionMatrix");
+        uniformsMap.createUniform("viewMatrix");
         uniformsMap.createUniform("modelMatrix");
 
         objects = new ArrayList<>();
@@ -39,6 +40,7 @@ public class ObjectRenderer {
         shaderProgram.bind();
 
         uniformsMap.setUniform("projectionMatrix", engine.getProjection().getProjectionMatrix());
+        uniformsMap.setUniform("viewMatrix", engine.getCurrentScene().getCamera().getViewMatrix());
 
         for (GameObject object : objects) {
             if (!object.isActive()) continue;

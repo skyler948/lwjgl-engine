@@ -4,6 +4,7 @@ import engine.display.Display;
 import engine.scene.GameScene;
 import engine.scene.Scene;
 import engine.scene.SceneManager;
+import engine.time.Time;
 import engine.view.Projection;
 import org.lwjgl.opengl.GL;
 
@@ -21,6 +22,8 @@ public class Engine {
 
     private int targetFps;
     private int currentFps, currentTps;
+
+    private double time;
 
     public Engine() {
         display = new Display(() -> {
@@ -43,7 +46,12 @@ public class Engine {
         projection = new Projection(this, 60.f);
     }
 
-    public void input() { // Use Time.deltaTime();
+    public void input() {
+        time = Time.deltaTime();
+        display.calculateMouseDifference();
+
+        if (!display.isCursorInWindow()) return;
+
         getCurrentScene().input();
     }
 
@@ -164,6 +172,10 @@ public class Engine {
 
     public int getCurrentTps() {
         return currentTps;
+    }
+
+    public double getTime() {
+        return time;
     }
 
 }
