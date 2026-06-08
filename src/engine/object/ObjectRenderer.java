@@ -32,6 +32,7 @@ public class ObjectRenderer {
         uniformsMap.createUniform("projectionMatrix");
         uniformsMap.createUniform("viewMatrix");
         uniformsMap.createUniform("modelMatrix");
+        uniformsMap.createUniform("textureSampler");
 
         objects = new ArrayList<>();
     }
@@ -41,6 +42,7 @@ public class ObjectRenderer {
 
         uniformsMap.setUniform("projectionMatrix", engine.getProjection().getProjectionMatrix());
         uniformsMap.setUniform("viewMatrix", engine.getCurrentScene().getCamera().getViewMatrix());
+        uniformsMap.setUniform("textureSampler", 0);
 
         for (GameObject object : objects) {
             if (!object.isActive()) continue;

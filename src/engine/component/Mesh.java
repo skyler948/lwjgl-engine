@@ -16,7 +16,7 @@ public class Mesh extends Component {
     private int vaoId;
     private List<Integer> vboIdList;
 
-    public Mesh(float[] vertices, int[] indices) {
+    public Mesh(float[] vertices, float[] textureCoordinates, int[] indices) {
         this.numVertices = vertices.length;
         vboIdList = new ArrayList<>();
 
@@ -33,6 +33,17 @@ public class Mesh extends Component {
         glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_STATIC_DRAW);
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+
+        // Texture coordinates
+        vboId = glGenBuffers();
+        vboIdList.add(vboId);
+
+        FloatBuffer textureBuffer = MemoryUtil.memCallocFloat(textureCoordinates.length);
+        textureBuffer.put(0, textureCoordinates);
+        glBindBuffer(GL_ARRAY_BUFFER, vboId);
+        glBufferData(GL_ARRAY_BUFFER, textureBuffer, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
 
         // Indices
         vboId = glGenBuffers();
