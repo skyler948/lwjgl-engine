@@ -5,6 +5,7 @@ import engine.scene.GameScene;
 import engine.scene.Scene;
 import engine.scene.SceneManager;
 import engine.time.Time;
+import engine.view.Frustum;
 import engine.view.Projection;
 import org.lwjgl.opengl.GL;
 
@@ -19,6 +20,7 @@ public class Engine {
     private Display display;
     private SceneManager sceneManager;
     private Projection projection;
+    private Frustum frustum;
 
     private int targetFps;
     private int currentFps, currentTps;
@@ -44,6 +46,7 @@ public class Engine {
 
         sceneManager = new SceneManager(new GameScene(this));
         projection = new Projection(this, 60.f);
+        frustum = new Frustum(this);
     }
 
     public void input() {
@@ -63,6 +66,7 @@ public class Engine {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glViewport(0, 0, display.getWidth(), display.getHeight());
 
+        frustum.recalculate();
         getCurrentScene().render();
     }
 
@@ -160,6 +164,10 @@ public class Engine {
 
     public Projection getProjection() {
         return projection;
+    }
+
+    public Frustum getFrustum() {
+        return frustum;
     }
 
     public int getTargetFps() {

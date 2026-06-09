@@ -47,6 +47,8 @@ public class ObjectRenderer {
         for (GameObject object : objects) {
             if (!object.isActive()) continue;
 
+            if (!engine.getFrustum().isInsideFrustum(object.getPosition(), object.getScale() / 2.f)) continue;
+
             uniformsMap.setUniform("modelMatrix", object.getModelMatrix());
 
             object.render();
